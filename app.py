@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, request
 import mysql.connector
 import os
+import traceback  # For detailed error logging
 
 app = Flask(__name__)
 
-# MySQL config using environment variables (for Railway)
+# MySQL config using Railway environment variables
 db_config = {
     'user': os.environ['DB_USER'],
     'password': os.environ['DB_PASSWORD'],
@@ -28,6 +29,8 @@ def get_products():
         conn.close()
         return jsonify(products)
     except Exception as e:
+        print("GET /products error:", e)
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 @app.route('/products', methods=['POST'])
@@ -45,6 +48,8 @@ def add_product():
         conn.close()
         return jsonify({'message': 'Product added'}), 201
     except Exception as e:
+        print("POST /products error:", e)
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
