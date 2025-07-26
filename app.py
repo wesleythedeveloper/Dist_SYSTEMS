@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# MySQL config from environment variables
+# MySQL config using environment variables (for Railway)
 db_config = {
     'user': os.environ['DB_USER'],
     'password': os.environ['DB_PASSWORD'],
@@ -12,6 +12,10 @@ db_config = {
     'database': os.environ['DB_NAME'],
     'port': int(os.environ.get('DB_PORT', 3306))
 }
+
+@app.route('/')
+def home():
+    return jsonify({"message": "Inventory API is running. Use /products to GET or POST data."})
 
 @app.route('/products', methods=['GET'])
 def get_products():
